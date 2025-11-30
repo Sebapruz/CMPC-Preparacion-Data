@@ -1,0 +1,19 @@
+# Ignorar entorno virtual
+venv/
+env/
+
+# Ignorar base de datos (se genera con el script)
+*.db
+*.sqlite3
+
+# Ignorar archivos compilados de Python
+__pycache__/
+*.pyc
+
+# Ignorar archivos del sistema Mac
+.DS_Store
+
+# Ignorar logs
+logs/
+*.log
+

@@ -1,0 +1,9 @@
+Día 2 – Logros: Pipelines y SQL
+-------------------------------
+[✔] Entorno activado correctamente.
+[✔] Concepto ETL aplicado: Extracción (API) -> Transformación (Pandas) -> Carga (SQL).
+[✔] Uso de pd.json_normalize para aplanar estructuras JSON anidadas.
+[✔] Creación de base de datos SQLite sin servidores externos.
+[✔] Implementación de SQLAlchemy para persistencia de datos.
+[✔] Creación de script de QA para validar datos con consultas SQL.
+[✔] Estructura de código modular (funciones separadas).

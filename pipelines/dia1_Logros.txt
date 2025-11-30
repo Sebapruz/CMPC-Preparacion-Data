@@ -1,0 +1,9 @@
+Día 1 – Logros
+--------------
+[✔] Entorno virtual creado y funcionando
+[✔] VS Code configurado con Python
+[✔] Librerías esenciales instaladas
+[✔] Dataset Titanic cargado
+[✔] Ejecución de análisis inicial de Pandas
+[✔] Limpieza aplicada y dataset final exportado
+[✔] Estructura profesional de proyecto creada
