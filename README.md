@@ -1,21 +1,20 @@
-# 🌲 CMPC Data Pipeline: Gastos Logísticos
+# CMPC Data Pipeline: Gastos Logísticos
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
 ![Status](https://img.shields.io/badge/Status-Production-green)
 ![Data Quality](https://img.shields.io/badge/Data%20Quality-Validated-orange)
 
-## 📄 Descripción del Proyecto
+## Descripción del Proyecto
 
 Este proyecto implementa un pipeline de Ingeniería de Datos **ETL (Extract, Transform, Load)** completamente automatizado para la gestión y auditoría de gastos logísticos de proveedores externos.
 
-El sistema fue diseñado con una arquitectura modular y defensiva, priorizando la **calidad de datos** y la **observabilidad**.  
-Su objetivo es consolidar datos desde fuentes externas (APIs), validarlos mediante reglas de negocio estrictas y almacenarlos en un Data Warehouse local para análisis financiero.
+El sistema fue diseñado con una arquitectura modular y defensiva, priorizando la **calidad de datos** y la **observabilidad**. Su objetivo es consolidar datos desde fuentes externas (APIs), validarlos mediante reglas de negocio estrictas y almacenarlos en un Data Warehouse local para análisis financiero.
 
 ---
 
-## 🏗️ Arquitectura del Sistema
+## 🏗️ rquitectura del Sistema
 
-El flujo de datos sigue un proceso lineal con *Quality Gates* que detienen la ejecución ante problemas críticos:
+El flujo de datos sigue un proceso lineal con "Guardias de Seguridad" (Quality Gates) intermedios:
 
 ```mermaid
 graph LR
@@ -25,76 +24,92 @@ graph LR
     C -->|❌ Fail| E[⛔ Log Error & Stop]
     D -->|Datos Limpios| F[(🗄️ SQLite Warehouse)]
     F --> G[📊 KPI Reporting]
-🛠️ Stack Tecnológico
-Lenguaje: Python 3.x
+```
 
-Procesamiento: Pandas (DataFrames)
+### 🛠️ Stack Tecnológico
+* **Lenguaje:** Python 3.x
+* **Procesamiento:** Pandas (DataFrames)
+* **Almacenamiento:** SQLite + SQLAlchemy
+* **Orquestación:** Bash + Cron (Unix Scheduling)
+* **Logging:** Sistema de logs rotativos customizado
+* **Control de Versiones:** Git & GitHub
 
-Almacenamiento: SQLite + SQLAlchemy
+---
 
-Orquestación: Bash + Cron (Unix Scheduling)
+## Instalación y Configuración
 
-Logging: Sistema de logs rotativos customizado
-
-Control de Versiones: Git & GitHub
-
-🚀 Instalación y Configuración
 Sigue estos pasos para desplegar el proyecto en un entorno local (macOS/Linux).
 
-1. Clonar el repositorio
-bash
-Copiar código
+### 1. Clonar el repositorio
+```bash
 git clone https://github.com/Sebapruz/CMPC-Preparacion-Data.git
 cd CMPC-Preparacion-Data
-2. Configurar el Entorno Virtual
-bash
-Copiar código
+```
+
+### 2. Configurar el Entorno Virtual
+Es recomendable usar un entorno aislado para manejar las dependencias.
+
+```bash
+# Crear entorno virtual
 python3 -m venv venv
+
+# Activar entorno
 source venv/bin/activate
-3. Instalar Dependencias
-bash
-Copiar código
+```
+
+### 3. Instalar Dependencias
+```bash
 pip install -r requirements.txt
-💻 Uso y Ejecución
-▶️ Ejecución Manual
+```
+
+---
+
+## 💻 Uso y Ejecución
+
+El proyecto puede ejecutarse de manera manual (para desarrollo) o automática (producción).
+
+### Ejecución Manual
 Para correr el pipeline completo (incluyendo validaciones):
 
-bash
-Copiar código
+```bash
 python3 -m pipelines.etl_robust
-Esto generará logs en logs/ y actualizará la base de datos en datasets/.
+```
+*Esto generará logs en la carpeta `logs/` y actualizará la base de datos en `datasets/`.*
 
-⏰ Automatización (Cron Job)
-El proyecto incluye un Wrapper Script (run_pipeline.sh) diseñado para orquestar la ejecución mediante Cron.
+### Automatización (Cron Job)
+El proyecto incluye un **Wrapper Script** (`run_pipeline.sh`) diseñado para orquestar la ejecución mediante el reloj del sistema.
 
-Dar permisos de ejecución:
-bash
-Copiar código
-chmod +x run_pipeline.sh
-Configurar Cron (Ejemplo: Ejecutar todos los días a las 09:00 AM):
-bash
-Copiar código
-crontab -e
-Agregar la siguiente línea (ajustando tu ruta absoluta):
+1.  **Dar permisos de ejecución:**
+    ```bash
+    chmod +x run_pipeline.sh
+    ```
 
-swift
-Copiar código
-0 9 * * * /ruta/absoluta/a/CMPC-Preparacion-Data/run_pipeline.sh
-🛡️ Calidad de Datos (Data Quality)
-El sistema implementa una capa de Programación Defensiva en utils/validations.py.
-El pipeline se detendrá automáticamente (Exit Code 1) si detecta:
+2.  **Configurar Cron (Ejemplo: Ejecutar todos los días a las 09:00 AM):**
+    ```bash
+    crontab -e
+    ```
+    Agrega la siguiente línea (ajustando tu ruta absoluta):
+    ```text
+    0 9 * * * /ruta/absoluta/a/CMPC-Preparacion-Data/run_pipeline.sh
+    ```
 
-Schema Drift: Si la API cambia de formato o faltan columnas obligatorias.
+---
 
-Null Values Críticos: Si campos clave como ID o Email vienen vacíos.
+## Calidad de Datos (Data Quality)
 
-Integridad Referencial: Extensible a reglas de negocio específicas.
+El sistema implementa una capa de **Programación Defensiva** en `utils/validations.py`. El pipeline se detendrá automáticamente (`Exit Code 1`) si detecta:
 
-Cualquier incidente de calidad queda registrado con nivel ERROR o CRITICAL en los logs.
+1.  **Schema Drift:** Si la API cambia de formato o faltan columnas obligatorias.
+2.  **Null Values (Críticos):** Si campos clave como `ID` o `Email` vienen vacíos.
+3.  **Integridad Referencial:** (Extensible a reglas de negocio específicas).
 
-📂 Estructura del Proyecto
-plaintext
-Copiar código
+Cualquier incidente de calidad queda registrado con nivel `ERROR` o `CRITICAL` en los logs.
+
+---
+
+## Estructura del Proyecto
+
+```text
 CMPC-Preparacion-Data/
 ├── config.py           # ⚙️ Configuración centralizada (Rutas dinámicas)
 ├── run_pipeline.sh     # 🤖 Wrapper para automatización con Cron
@@ -108,8 +123,14 @@ CMPC-Preparacion-Data/
 │   ├── logger.py       # Configuración de logging
 │   └── validations.py  # Motor de reglas de calidad
 └── sql/                # 🔍 Scripts de análisis y consultas
-👤 Autor
-Sebastián Palma
-Ingeniero de Datos en formación | Enfocado en Arquitecturas Robustas y Automatización.
+```
 
-Este proyecto fue desarrollado como parte de una simulación intensiva de Ingeniería de Datos.
+---
+
+## 👤 Autor
+
+**Sebastián Palma**
+*Ingeniero de Datos en formación | Enfocado en Arquitecturas Robustas y Automatización.*
+
+---
+*Este proyecto fue desarrollado como parte de una simulación intensiva de Ingeniería de Datos.*
