@@ -1,19 +1,21 @@
-# Ignorar entorno virtual
-venv/
-env/
+# --- Archivos de Sistema Mac (El culpable) ---
+.DS_Store
+._*
 
-# Ignorar base de datos (se genera con el script)
-*.db
-*.sqlite3
-
-# Ignorar archivos compilados de Python
+# --- Python ---
 __pycache__/
 *.pyc
 
-# Ignorar archivos del sistema Mac
-.DS_Store
+# --- Entornos Virtuales ---
+venv/
+env/
+.venv/
 
-# Ignorar logs
+# --- Datos y Logs ---
+*.db
+*.sqlite3
 logs/
 *.log
 
+# --- Archivos temporales de VS Code ---
+.vscode/
